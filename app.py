@@ -204,6 +204,21 @@ CALENDAR_COMPACT_CSS = """
   --tc-head-height: clamp(26px, 3.2vw, 42px) !important;
   --tc-day-height: clamp(54px, 6.8vw, 88px) !important;
 }
+.tc-week-card {
+  padding: 7px 4px !important;
+}
+.tc-week-title,
+.tc-week-pnl,
+.tc-week-badge {
+  line-height: 1.05 !important;
+}
+.tc-week-pnl,
+.tc-week-badge {
+  margin-top: 2px !important;
+}
+.tc-week-badge {
+  padding: 2px 4px !important;
+}
 </style>
 """
 
