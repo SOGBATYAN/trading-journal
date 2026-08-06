@@ -235,7 +235,23 @@ st.markdown(
     div[data-testid="stButton"] > button[kind="primary"] { background: #1e9f62; border-color: #58dc95; color: white; }
     div[data-testid="stDateInput"] input { color: #f3f5f8; }
     .site-section-gap { height: 12px; }
-    .site-month-title { color:#f3f5f8; font: 780 clamp(20px,2vw,28px) Inter,system-ui,sans-serif; text-align:center; padding-top:5px; }
+    .site-month-title { color:#f3f5f8; font: 780 clamp(20px,2vw,28px) Inter,system-ui,sans-serif; text-align:center; padding:0; line-height:50px; white-space:nowrap; }
+    .st-key-calendar_prev div[data-testid="stButton"] > button,
+    .st-key-calendar_next div[data-testid="stButton"] > button {
+      width:50px !important; min-width:50px !important; height:50px !important; min-height:50px !important;
+      padding:0 !important; border:1px solid #285e50 !important; border-radius:11px !important;
+      background:#101724 !important; color:#62dea0 !important; box-shadow:none !important;
+      font-size:30px !important; font-weight:450 !important; line-height:1 !important;
+      transition:background .16s ease,border-color .16s ease,color .16s ease !important;
+    }
+    .st-key-calendar_prev div[data-testid="stButton"] > button:hover,
+    .st-key-calendar_next div[data-testid="stButton"] > button:hover {
+      border-color:#65e5a5 !important; background:#1c3a35 !important; color:#f3f5f8 !important;
+    }
+    .st-key-calendar_prev div[data-testid="stButton"] > button:disabled,
+    .st-key-calendar_next div[data-testid="stButton"] > button:disabled {
+      border-color:#285e50 !important; background:#101724 !important; color:#62dea0 !important; opacity:.32 !important;
+    }
     .site-dashboard-heading { display:flex; align-items:center; gap:10px; color:#f3f5f8; font:820 clamp(30px,2.4vw,42px) Inter,system-ui,sans-serif; line-height:1.2; letter-spacing:-.025em; padding:.15rem 0 .55rem; }
     .site-dashboard-sparkle { color:#69dda0; font-size:1.12em; line-height:1; }
     </style>
@@ -316,15 +332,15 @@ months = sorted(trades["month"].dropna().unique().tolist())
 if "month_index" not in st.session_state or st.session_state.month_index >= len(months):
     st.session_state.month_index = len(months) - 1
 
-left, month_title, right, month_stats = st.columns([0.55, 2.5, 0.55, 5.4])
+left, month_title, right, month_stats = st.columns([0.38, 1.35, 0.38, 7.9], gap="small", vertical_alignment="center")
 with left:
-    if st.button("‹", disabled=st.session_state.month_index == 0, use_container_width=True):
+    if st.button("‹", key="calendar_prev", disabled=st.session_state.month_index == 0, use_container_width=True):
         st.session_state.month_index -= 1
         st.rerun()
 with month_title:
     st.markdown(f'<div class="site-month-title">{core["month_label"](months[st.session_state.month_index])}</div>', unsafe_allow_html=True)
 with right:
-    if st.button("›", disabled=st.session_state.month_index == len(months) - 1, use_container_width=True):
+    if st.button("›", key="calendar_next", disabled=st.session_state.month_index == len(months) - 1, use_container_width=True):
         st.session_state.month_index += 1
         st.rerun()
 with month_stats:
