@@ -344,7 +344,7 @@ if start_date > end_date:
     st.stop()
 
 show_html(core["APP_WIDGET_CSS"] + '<div class="tc-app-shell tc-period-shell">' + core["render_period_dashboard"](trades, start_date, end_date) + "</div>")
-show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_period_equity_chart"](trades, start_date, end_date), height=430)
+show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_period_equity_chart"](trades, start_date, end_date), height=450)
 
 st.markdown('<div class="site-section-gap"></div>', unsafe_allow_html=True)
 
