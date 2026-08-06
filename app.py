@@ -200,9 +200,9 @@ MONTH_STATS_ALIGN_CSS = """
 CALENDAR_COMPACT_CSS = """
 <style>
 .tc-calendar-layout {
-  --tc-row-gap: clamp(3px, .5vw, 7px) !important;
-  --tc-head-height: clamp(28px, 3.6vw, 46px) !important;
-  --tc-day-height: clamp(60px, 7.6vw, 100px) !important;
+  --tc-row-gap: clamp(2px, .4vw, 5px) !important;
+  --tc-head-height: clamp(26px, 3.2vw, 42px) !important;
+  --tc-day-height: clamp(54px, 6.8vw, 88px) !important;
 }
 </style>
 """
