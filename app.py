@@ -197,11 +197,18 @@ MONTH_STATS_ALIGN_CSS = """
 """
 
 
-CALENDAR_SCALE_CSS = """
+CALENDAR_COMPACT_CSS = """
 <style>
+.tc-calendar-compact {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 .tc-calendar-scale {
-  width: calc(100% / 0.85);
-  zoom: 0.85;
+  width: 100%;
+  zoom: .85;
 }
 </style>
 """
@@ -357,6 +364,6 @@ with month_stats:
     show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
-show_html(core["CALENDAR_CSS"] + CALENDAR_SCALE_CSS + '<div class="tc-calendar-scale"><div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div></div>")
+show_html(core["CALENDAR_CSS"] + CALENDAR_COMPACT_CSS + '<div class="tc-calendar-compact"><div class="tc-calendar-scale"><div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div></div></div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
 show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=590)
