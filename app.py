@@ -33,6 +33,29 @@ def load_notebook_core() -> dict:
 core = load_notebook_core()
 
 
+CHART_DISPLAY_CSS = """
+<style>
+.tc-chart-title {
+  font-size: clamp(19px, 1.55vw, 24px) !important;
+  line-height: 1.2 !important;
+}
+.tc-chart-subtitle {
+  margin-top: 4px !important;
+  font-size: clamp(11px, .95vw, 14px) !important;
+  line-height: 1.25 !important;
+}
+.tc-chart-axis-text {
+  fill: #b8c3d5 !important;
+  font-size: 11px !important;
+  opacity: 1 !important;
+}
+.tc-period-equity-card .tc-chart-svg {
+  max-height: none !important;
+}
+</style>
+"""
+
+
 def show_html(markup: str) -> None:
     st.html(markup)
 
@@ -104,7 +127,7 @@ st.session_state.end_date = max(first_date, min(st.session_state.end_date, last_
 # Верхний Dashboard и независимый выбор периода.
 title_col, *button_cols = st.columns([5.4, 1, 1, 1, 1])
 with title_col:
-    st.markdown("## ✦ Dashboard")
+    st.header("✦ Dashboard", anchor=False)
 for column, key, label in zip(button_cols, ["7d", "30d", "90d", "all"], ["7D", "30D", "90D", "All"]):
     with column:
         st.button(
@@ -141,7 +164,7 @@ if start_date > end_date:
     st.stop()
 
 show_html(core["APP_WIDGET_CSS"] + '<div class="tc-app-shell tc-period-shell">' + core["render_period_dashboard"](trades, start_date, end_date) + "</div>")
-show_svg_html(core["APP_WIDGET_CSS"] + core["render_period_equity_chart"](trades, start_date, end_date), height=370)
+show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_period_equity_chart"](trades, start_date, end_date), height=550)
 
 st.markdown('<div class="site-section-gap"></div>', unsafe_allow_html=True)
 
@@ -167,4 +190,4 @@ with month_stats:
 selected_month = months[st.session_state.month_index]
 show_html(core["CALENDAR_CSS"] + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
-show_svg_html(core["APP_WIDGET_CSS"] + core["render_month_charts"](daily, selected_month), height=390)
+show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=540)
