@@ -233,7 +233,7 @@ st.markdown(
     .stMainBlockContainer,
     .main .block-container {
       width: 100% !important;
-      max-width: 880px !important;
+      max-width: 1000px !important;
       margin-left: auto !important;
       margin-right: auto !important;
       padding-top: 1.4rem !important;
