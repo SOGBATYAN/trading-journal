@@ -197,6 +197,17 @@ MONTH_STATS_ALIGN_CSS = """
 """
 
 
+CALENDAR_COMPACT_CSS = """
+<style>
+.tc-calendar-layout {
+  --tc-row-gap: clamp(3px, .5vw, 7px) !important;
+  --tc-head-height: clamp(28px, 3.6vw, 46px) !important;
+  --tc-day-height: clamp(60px, 7.6vw, 100px) !important;
+}
+</style>
+"""
+
+
 def show_html(markup: str) -> None:
     st.html(markup)
 
@@ -341,7 +352,7 @@ months = sorted(trades["month"].dropna().unique().tolist())
 if "month_index" not in st.session_state or st.session_state.month_index >= len(months):
     st.session_state.month_index = len(months) - 1
 
-left, month_title, right, month_stats = st.columns([0.62, 1.6, 0.62, 7.16], gap="medium", vertical_alignment="center")
+left, month_title, right, month_stats = st.columns([0.62, 2.0, 0.7, 6.68], gap="medium", vertical_alignment="center")
 with left:
     if st.button("‹", key="calendar_prev", disabled=st.session_state.month_index == 0, use_container_width=True):
         st.session_state.month_index -= 1
@@ -356,6 +367,6 @@ with month_stats:
     show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
-show_html(core["CALENDAR_CSS"] + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
+show_html(core["CALENDAR_CSS"] + CALENDAR_COMPACT_CSS + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
 show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=590)
