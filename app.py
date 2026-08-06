@@ -11,7 +11,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 
-st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="centered")
 
 
 @st.cache_resource
@@ -233,7 +233,7 @@ st.markdown(
     .stMainBlockContainer,
     .main .block-container {
       width: 100% !important;
-      max-width: 1000px !important;
+      max-width: 880px !important;
       margin-left: auto !important;
       margin-right: auto !important;
       padding-top: 1.4rem !important;
