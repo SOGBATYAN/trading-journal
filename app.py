@@ -201,20 +201,18 @@ CALENDAR_COMPACT_CSS = """
 <style>
 /* Масштабируем сам сгенерированный календарь, не полагаясь на классы notebook. */
 .tc-scroll {
-  overflow-x: auto !important;
+  overflow-x: hidden !important;
   overflow-y: hidden !important;
   padding: 2px 1px 4px !important;
-  scrollbar-color: #465269 #121829;
-  scrollbar-width: thin;
 }
 .tc-calendar-compact {
-  width: 125% !important;
+  width: 100% !important;
   zoom: .80;
   transform-origin: top left;
 }
 @supports not (zoom: 1) {
   .tc-calendar-compact {
-    width: 125% !important;
+    width: 100% !important;
     transform: scale(.80);
     transform-origin: top left;
   }
