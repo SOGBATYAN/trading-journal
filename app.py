@@ -341,7 +341,7 @@ months = sorted(trades["month"].dropna().unique().tolist())
 if "month_index" not in st.session_state or st.session_state.month_index >= len(months):
     st.session_state.month_index = len(months) - 1
 
-left, month_title, right, month_stats = st.columns([0.38, 1.35, 0.38, 7.9], gap="small", vertical_alignment="center")
+left, month_title, right, month_stats = st.columns([0.62, 1.6, 0.62, 7.16], gap="medium", vertical_alignment="center")
 with left:
     if st.button("‹", key="calendar_prev", disabled=st.session_state.month_index == 0, use_container_width=True):
         st.session_state.month_index -= 1
