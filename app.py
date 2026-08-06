@@ -207,14 +207,12 @@ CALENDAR_COMPACT_CSS = """
 .tc-week-card {
   padding: 7px 4px !important;
 }
-.tc-week-title,
+.tc-week-title { line-height: 1.15 !important; }
+.tc-week-pnl,
+.tc-week-badge { line-height: 1.1 !important; }
 .tc-week-pnl,
 .tc-week-badge {
-  line-height: 1.05 !important;
-}
-.tc-week-pnl,
-.tc-week-badge {
-  margin-top: 2px !important;
+  margin-top: 4px !important;
 }
 .tc-week-badge {
   padding: 2px 4px !important;
