@@ -264,6 +264,7 @@ st.markdown(
       font-size:30px !important; font-weight:450 !important; line-height:1 !important;
       transition:background .16s ease,border-color .16s ease,color .16s ease !important;
     }
+    .st-key-calendar_next { transform: translateX(-14px); }
     .st-key-calendar_prev div[data-testid="stButton"] > button:hover,
     .st-key-calendar_next div[data-testid="stButton"] > button:hover {
       border-color:#65e5a5 !important; background:#1c3a35 !important; color:#f3f5f8 !important;
@@ -343,7 +344,7 @@ if start_date > end_date:
     st.stop()
 
 show_html(core["APP_WIDGET_CSS"] + '<div class="tc-app-shell tc-period-shell">' + core["render_period_dashboard"](trades, start_date, end_date) + "</div>")
-show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_period_equity_chart"](trades, start_date, end_date), height=610)
+show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_period_equity_chart"](trades, start_date, end_date), height=430)
 
 st.markdown('<div class="site-section-gap"></div>', unsafe_allow_html=True)
 
