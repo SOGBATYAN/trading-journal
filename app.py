@@ -11,7 +11,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 
-st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="centered")
+st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="wide")
 
 
 @st.cache_resource
@@ -197,6 +197,80 @@ MONTH_STATS_ALIGN_CSS = """
 """
 
 
+CALENDAR_COMPACT_CSS = """
+<style>
+/* Компактный календарь: весь месяц удобнее помещается на одном экране. */
+.tc-scroll {
+  overflow-x: auto !important;
+  padding: 2px 1px 5px !important;
+  font-size: 12px !important;
+  scrollbar-color: #465269 #121829;
+  scrollbar-width: thin;
+}
+.tc-scroll :is(.tc-calendar, .tc-calendar-grid, .calendar-grid, [class*="calendar-grid"]) {
+  min-width: 760px !important;
+  grid-template-columns: repeat(7, minmax(92px, 1fr)) !important;
+  gap: 5px !important;
+}
+.tc-scroll :is(.tc-weekday, .tc-calendar-weekday, .calendar-weekday, [class*="weekday"]) {
+  min-height: 24px !important;
+  padding: 3px 5px !important;
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+  letter-spacing: .035em !important;
+}
+.tc-scroll :is(.tc-day, .tc-day-card, .tc-cal-day, .tc-calendar-day, .tc-calendar-cell, .tc-cal-cell, .calendar-day, .calendar-cell, [class*="day-card"], [class*="calendar-day"], [class*="calendar-cell"]) {
+  min-height: 78px !important;
+  height: auto !important;
+  padding: 6px 7px !important;
+  border-radius: 9px !important;
+}
+.tc-scroll :is(.tc-date, .tc-day-number, .tc-calendar-day-number, .calendar-day-number, [class*="day-number"]) {
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
+.tc-scroll :is(.tc-day-pnl, .tc-calendar-pnl, .tc-pnl, .calendar-pnl, [class*="day-pnl"]) {
+  margin-top: 3px !important;
+  font-size: 12px !important;
+  line-height: 1.12 !important;
+}
+.tc-scroll :is(.tc-day-meta, .tc-day-detail, .tc-day-count, .tc-calendar-meta, .tc-trades, .tc-trade-list, .calendar-meta, [class*="day-meta"], [class*="trade-list"], [class*="trade-count"]) {
+  margin-top: 3px !important;
+  font-size: 9.5px !important;
+  line-height: 1.18 !important;
+}
+.tc-scroll :is(.tc-trades, .tc-trade-list, [class*="trade-list"]) {
+  max-height: 42px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+}
+.tc-scroll table {
+  border-spacing: 5px !important;
+}
+.tc-scroll th {
+  height: 24px !important;
+  padding: 3px 5px !important;
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+}
+.tc-scroll td {
+  height: 78px !important;
+  min-height: 78px !important;
+  padding: 6px 7px !important;
+  vertical-align: top !important;
+}
+@media (max-width: 900px) {
+  .tc-scroll {
+    min-width: 720px;
+  }
+  .tc-scroll :is(.tc-calendar, .tc-calendar-grid, .calendar-grid, [class*="calendar-grid"]) {
+    gap: 4px !important;
+  }
+}
+</style>
+"""
+
+
 def show_html(markup: str) -> None:
     st.html(markup)
 
@@ -229,16 +303,7 @@ st.markdown(
     """
     <style>
     .stApp { background: #090d17; color: #f3f5f8; }
-    [data-testid="stMainBlockContainer"],
-    .stMainBlockContainer,
-    .main .block-container {
-      width: 100% !important;
-      max-width: 880px !important;
-      margin-left: auto !important;
-      margin-right: auto !important;
-      padding-top: 1.4rem !important;
-      padding-bottom: 3rem !important;
-    }
+    .block-container { max-width: 1500px; padding-top: 1.4rem; padding-bottom: 3rem; }
     [data-testid="stFileUploader"] { border: 1px solid #262d3f; border-radius: 14px; padding: .45rem .8rem; background: #101524; }
     div[data-testid="stButton"] > button { border-radius: 9px; font-weight: 750; min-height: 38px; }
     div[data-testid="stButton"] > button[kind="primary"] { background: #1e9f62; border-color: #58dc95; color: white; }
@@ -356,6 +421,6 @@ with month_stats:
     show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
-show_html(core["CALENDAR_CSS"] + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
+show_html(core["CALENDAR_CSS"] + CALENDAR_COMPACT_CSS + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
 show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=590)
