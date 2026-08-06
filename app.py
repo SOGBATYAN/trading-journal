@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import html
 import json
-import re
 import tempfile
 from datetime import date, timedelta
 from pathlib import Path
@@ -12,7 +11,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 
-st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="centered")
 
 
 @st.cache_resource
@@ -198,37 +197,6 @@ MONTH_STATS_ALIGN_CSS = """
 """
 
 
-CALENDAR_COMPACT_CSS = """
-<style>
-.tc-scroll {
-  overflow-x: hidden !important;
-  padding: 1px !important;
-}
-</style>
-"""
-
-
-def compact_calendar_css(source_css: str) -> str:
-    """Уменьшает реальные размеры календарных ячеек в CSS и inline-стилях."""
-    property_pattern = re.compile(
-        r"(?i)((?:min-|max-)?height|grid-auto-rows|grid-template-rows|row-gap|column-gap|gap|"
-        r"padding|padding-(?:top|right|bottom|left)|border-spacing)(\s*:\s*)([^;}]+)"
-    )
-
-    def compact_declaration(match: re.Match) -> str:
-        property_name, separator, value = match.groups()
-        maximum = 84.0 if "height" in property_name.lower() or "rows" in property_name.lower() else 5.0
-
-        def cap_pixels(pixel_match: re.Match) -> str:
-            original = float(pixel_match.group(1))
-            compact = min(original, maximum)
-            return f"{compact:g}px"
-
-        return property_name + separator + re.sub(r"(\d+(?:\.\d+)?)px", cap_pixels, value)
-
-    return property_pattern.sub(compact_declaration, source_css)
-
-
 def show_html(markup: str) -> None:
     st.html(markup)
 
@@ -261,7 +229,16 @@ st.markdown(
     """
     <style>
     .stApp { background: #090d17; color: #f3f5f8; }
-    .block-container { max-width: 1500px; padding-top: 1.4rem; padding-bottom: 3rem; }
+    [data-testid="stMainBlockContainer"],
+    .stMainBlockContainer,
+    .main .block-container {
+      width: 100% !important;
+      max-width: 880px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      padding-top: 1.4rem !important;
+      padding-bottom: 3rem !important;
+    }
     [data-testid="stFileUploader"] { border: 1px solid #262d3f; border-radius: 14px; padding: .45rem .8rem; background: #101524; }
     div[data-testid="stButton"] > button { border-radius: 9px; font-weight: 750; min-height: 38px; }
     div[data-testid="stButton"] > button[kind="primary"] { background: #1e9f62; border-color: #58dc95; color: white; }
@@ -379,8 +356,6 @@ with month_stats:
     show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
-calendar_css = compact_calendar_css(core["CALENDAR_CSS"])
-calendar_grid = compact_calendar_css(core["render_calendar_grid"](daily, selected_month))
-show_html(calendar_css + CALENDAR_COMPACT_CSS + '<div class="tc-scroll">' + calendar_grid + "</div>")
+show_html(core["CALENDAR_CSS"] + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
 show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=590)
