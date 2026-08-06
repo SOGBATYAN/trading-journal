@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import tempfile
 from datetime import date, timedelta
 from pathlib import Path
@@ -199,26 +200,33 @@ MONTH_STATS_ALIGN_CSS = """
 
 CALENDAR_COMPACT_CSS = """
 <style>
-/* Масштабируем сам сгенерированный календарь, не полагаясь на классы notebook. */
 .tc-scroll {
   overflow-x: hidden !important;
-  overflow-y: hidden !important;
-  padding: 2px 1px 4px !important;
-}
-.tc-calendar-compact {
-  width: 100% !important;
-  zoom: .80;
-  transform-origin: top left;
-}
-@supports not (zoom: 1) {
-  .tc-calendar-compact {
-    width: 100% !important;
-    transform: scale(.80);
-    transform-origin: top left;
-  }
+  padding: 1px !important;
 }
 </style>
 """
+
+
+def compact_calendar_css(source_css: str) -> str:
+    """Уменьшает реальные размеры календарных ячеек в CSS и inline-стилях."""
+    property_pattern = re.compile(
+        r"(?i)((?:min-|max-)?height|grid-auto-rows|grid-template-rows|row-gap|column-gap|gap|"
+        r"padding|padding-(?:top|right|bottom|left)|border-spacing)(\s*:\s*)([^;}]+)"
+    )
+
+    def compact_declaration(match: re.Match) -> str:
+        property_name, separator, value = match.groups()
+        maximum = 84.0 if "height" in property_name.lower() or "rows" in property_name.lower() else 5.0
+
+        def cap_pixels(pixel_match: re.Match) -> str:
+            original = float(pixel_match.group(1))
+            compact = min(original, maximum)
+            return f"{compact:g}px"
+
+        return property_name + separator + re.sub(r"(\d+(?:\.\d+)?)px", cap_pixels, value)
+
+    return property_pattern.sub(compact_declaration, source_css)
 
 
 def show_html(markup: str) -> None:
@@ -371,6 +379,8 @@ with month_stats:
     show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
-show_html(core["CALENDAR_CSS"] + CALENDAR_COMPACT_CSS + '<div class="tc-scroll"><div class="tc-calendar-compact">' + core["render_calendar_grid"](daily, selected_month) + "</div></div>")
+calendar_css = compact_calendar_css(core["CALENDAR_CSS"])
+calendar_grid = compact_calendar_css(core["render_calendar_grid"](daily, selected_month))
+show_html(calendar_css + CALENDAR_COMPACT_CSS + '<div class="tc-scroll">' + calendar_grid + "</div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
 show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=590)
