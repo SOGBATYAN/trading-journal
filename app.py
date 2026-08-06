@@ -198,7 +198,7 @@ MONTH_STATS_ALIGN_CSS = """
 
 
 # Общий масштаб календарной сетки. Например: 0.80 = 80%, 0.90 = 90%.
-CALENDAR_SCALE = 0.6
+CALENDAR_SCALE = 0.82
 CALENDAR_SCALE_CSS = f"""
 <style>
 .tc-scroll {{
