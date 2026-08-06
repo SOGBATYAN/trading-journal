@@ -187,6 +187,16 @@ CHART_DISPLAY_CSS = """
 """
 
 
+MONTH_STATS_ALIGN_CSS = """
+<style>
+.tc-app-stats {
+  width: 100% !important;
+  justify-content: flex-end !important;
+}
+</style>
+"""
+
+
 def show_html(markup: str) -> None:
     st.html(markup)
 
@@ -318,7 +328,7 @@ with right:
         st.session_state.month_index += 1
         st.rerun()
 with month_stats:
-    show_html(core["APP_WIDGET_CSS"] + core["app_stats_html"](daily, months[st.session_state.month_index]))
+    show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
 show_html(core["CALENDAR_CSS"] + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
