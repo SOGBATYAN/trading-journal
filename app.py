@@ -197,6 +197,17 @@ MONTH_STATS_ALIGN_CSS = """
 """
 
 
+# Общий масштаб календарной сетки. Например: 0.80 = 80%, 0.90 = 90%.
+CALENDAR_SCALE = 0.82
+CALENDAR_SCALE_CSS = f"""
+<style>
+.tc-scroll {{
+  zoom: {CALENDAR_SCALE};
+}}
+</style>
+"""
+
+
 def show_html(markup: str) -> None:
     st.html(markup)
 
@@ -347,6 +358,6 @@ with month_stats:
     show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
-show_html(core["CALENDAR_CSS"] + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
+show_html(core["CALENDAR_CSS"] + CALENDAR_SCALE_CSS + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
 show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=590)
