@@ -49,13 +49,16 @@ def _chart_grid(low: float, high: float, width: float, height: float, left: floa
     return y_for_value, parts
 
 
-def _data_date_labels(parts, values, x_for_value, plot_bottom: float, height: float, label_for_value) -> None:
+def _data_date_labels(parts, values, x_for_value, plot_bottom: float, height: float, label_for_value, rotate_labels: bool = True) -> None:
     label_y = min(height - 9.0, plot_bottom + 15.0)
     for value in values:
         x = x_for_value(value)
         label = html.escape(label_for_value(value))
         parts.append(f'<line class="tc-chart-zero-line" x1="{x:.1f}" y1="{plot_bottom:.1f}" x2="{x:.1f}" y2="{plot_bottom+4:.1f}"/>')
-        parts.append(f'<text class="tc-chart-axis-text tc-chart-x-label" x="{x:.1f}" y="{label_y:.1f}" text-anchor="end" transform="rotate(-55 {x:.1f} {label_y:.1f})">{label}</text>')
+        if rotate_labels:
+            parts.append(f'<text class="tc-chart-axis-text tc-chart-x-label" x="{x:.1f}" y="{label_y:.1f}" text-anchor="end" transform="rotate(-55 {x:.1f} {label_y:.1f})">{label}</text>')
+        else:
+            parts.append(f'<text class="tc-chart-axis-text tc-chart-x-label" x="{x:.1f}" y="{label_y:.1f}" text-anchor="middle">{label}</text>')
 
 
 def _month_chart_geometry(low: float, high: float, days_in_month: int, data_days):
@@ -68,7 +71,7 @@ def _month_chart_geometry(low: float, high: float, days_in_month: int, data_days
 
     y_for_value, parts = _chart_grid(low, high, width, height, left, right, top, bottom)
     plot_bottom = height - bottom
-    _data_date_labels(parts, sorted(set(data_days)), x_for_day, plot_bottom, height, lambda day: str(int(day)))
+    _data_date_labels(parts, sorted(set(data_days)), x_for_day, plot_bottom, height, lambda day: str(int(day)), rotate_labels=False)
     zero_y = y_for_value(0.0)
     parts.append(f'<line class="tc-chart-zero-line" x1="{left:.1f}" y1="{zero_y:.1f}" x2="{width-right:.1f}" y2="{zero_y:.1f}"/>')
     return width, height, plot_width, x_for_day, y_for_value, zero_y, parts
