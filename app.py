@@ -229,7 +229,7 @@ st.markdown(
     """
     <style>
     .stApp { background: #090d17; color: #f3f5f8; }
-    .block-container { max-width: 1500px; padding-top: 1.4rem; padding-bottom: 3rem; }
+    .block-container { width: 100%; max-width: 1200px; padding-top: 1.4rem; padding-bottom: 3rem; }
     [data-testid="stFileUploader"] { border: 1px solid #262d3f; border-radius: 14px; padding: .45rem .8rem; background: #101524; }
     div[data-testid="stButton"] > button { border-radius: 9px; font-weight: 750; min-height: 38px; }
     div[data-testid="stButton"] > button[kind="primary"] { background: #1e9f62; border-color: #58dc95; color: white; }
