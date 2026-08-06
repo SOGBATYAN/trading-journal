@@ -11,7 +11,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 
-st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Торговый календарь", page_icon="📈", layout="centered")
 
 
 @st.cache_resource
@@ -197,6 +197,17 @@ MONTH_STATS_ALIGN_CSS = """
 """
 
 
+CALENDAR_COMPACT_CSS = """
+<style>
+.tc-calendar-layout {
+  --tc-row-gap: clamp(2px, .4vw, 5px) !important;
+  --tc-head-height: clamp(26px, 3.2vw, 42px) !important;
+  --tc-day-height: clamp(54px, 6.8vw, 88px) !important;
+}
+</style>
+"""
+
+
 def show_html(markup: str) -> None:
     st.html(markup)
 
@@ -229,7 +240,16 @@ st.markdown(
     """
     <style>
     .stApp { background: #090d17; color: #f3f5f8; }
-    .block-container { max-width: 1500px; padding-top: 1.4rem; padding-bottom: 3rem; }
+    [data-testid="stMainBlockContainer"],
+    .stMainBlockContainer,
+    .main .block-container {
+      width: 100% !important;
+      max-width: 1000px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      padding-top: 1.4rem !important;
+      padding-bottom: 3rem !important;
+    }
     [data-testid="stFileUploader"] { border: 1px solid #262d3f; border-radius: 14px; padding: .45rem .8rem; background: #101524; }
     div[data-testid="stButton"] > button { border-radius: 9px; font-weight: 750; min-height: 38px; }
     div[data-testid="stButton"] > button[kind="primary"] { background: #1e9f62; border-color: #58dc95; color: white; }
@@ -332,7 +352,7 @@ months = sorted(trades["month"].dropna().unique().tolist())
 if "month_index" not in st.session_state or st.session_state.month_index >= len(months):
     st.session_state.month_index = len(months) - 1
 
-left, month_title, right, month_stats = st.columns([0.38, 1.35, 0.38, 7.9], gap="small", vertical_alignment="center")
+left, month_title, right, month_stats = st.columns([0.62, 2.0, 0.7, 6.68], gap="medium", vertical_alignment="center")
 with left:
     if st.button("‹", key="calendar_prev", disabled=st.session_state.month_index == 0, use_container_width=True):
         st.session_state.month_index -= 1
@@ -347,6 +367,6 @@ with month_stats:
     show_html(core["APP_WIDGET_CSS"] + MONTH_STATS_ALIGN_CSS + core["app_stats_html"](daily, months[st.session_state.month_index]))
 
 selected_month = months[st.session_state.month_index]
-show_html(core["CALENDAR_CSS"] + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
+show_html(core["CALENDAR_CSS"] + CALENDAR_COMPACT_CSS + '<div class="tc-scroll">' + core["render_calendar_grid"](daily, selected_month) + "</div>")
 show_html(core["APP_WIDGET_CSS"] + core["render_dashboard"](trades, daily, selected_month))
 show_svg_html(core["APP_WIDGET_CSS"] + CHART_DISPLAY_CSS + core["render_month_charts"](daily, selected_month), height=590)
