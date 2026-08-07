@@ -124,7 +124,7 @@ def _period_equity_curve_svg_all_dates(trades: pd.DataFrame, start_date, end_dat
 
     low, high = core["_chart_bounds"]([value for _, value in curve])
     total_days = max(1, (end_date - start_date).days)
-    width = max(1120.0, 70.0 + 34.0 + total_days * 24.0)
+    width = 1000.0
     height = 330.0
     left, right, top, bottom = 70.0, 34.0, 20.0, 70.0
     plot_width = width - left - right
@@ -136,7 +136,12 @@ def _period_equity_curve_svg_all_dates(trades: pd.DataFrame, start_date, end_dat
     plot_bottom = height - bottom
     date_format = "%d.%m.%y" if start_date.year != end_date.year else "%d.%m"
     data_dates = [trade_date for trade_date, _ in daily_rows]
-    _data_date_labels(parts, data_dates, x_for_date, plot_bottom, height, lambda trade_date: trade_date.strftime(date_format))
+    max_date_labels = 16
+    label_step = max(1, (len(data_dates) + max_date_labels - 1) // max_date_labels)
+    label_dates = data_dates[::label_step]
+    if data_dates and label_dates[-1] != data_dates[-1]:
+        label_dates.append(data_dates[-1])
+    _data_date_labels(parts, label_dates, x_for_date, plot_bottom, height, lambda trade_date: trade_date.strftime(date_format))
 
     zero_y = y_for_value(0.0)
     parts.append(f'<line class="tc-chart-zero-line" x1="{left:.1f}" y1="{zero_y:.1f}" x2="{width-right:.1f}" y2="{zero_y:.1f}"/>')
@@ -148,7 +153,7 @@ def _period_equity_curve_svg_all_dates(trades: pd.DataFrame, start_date, end_dat
     parts.append(f'<path d="{path}" fill="none" stroke="#60dfa0" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>')
     for x, y in points[1:]:
         parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#60dfa0" stroke="#162b2a" stroke-width="1.2"/>')
-    return f'<svg class="tc-chart-svg tc-period-chart-svg" style="min-width:{width:.0f}px" viewBox="0 0 {width:.0f} {height:.0f}" role="img" aria-label="Кривая доходности выбранного периода">' + "".join(parts) + "</svg>"
+    return f'<svg class="tc-chart-svg tc-period-chart-svg" viewBox="0 0 {width:.0f} {height:.0f}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Кривая доходности выбранного периода">' + "".join(parts) + "</svg>"
 
 
 core["_equity_curve_svg"] = _equity_curve_svg_all_dates
@@ -180,7 +185,14 @@ CHART_DISPLAY_CSS = """
 .tc-chart-x-label {
   font-size: 10px !important;
 }
+.tc-period-equity-card {
+  overflow-x: hidden !important;
+}
 .tc-period-equity-card .tc-chart-svg {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
   max-height: none !important;
 }
 </style>
