@@ -94,7 +94,7 @@ def _equity_curve_svg_all_dates(rows, days_in_month: int) -> str:
     parts.append(f'<path d="{path}" fill="none" stroke="#60dfa0" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>')
     for x, y in points[1:]:
         parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#60dfa0" stroke="#162b2a" stroke-width="1.2"/>')
-    return f'<svg class="tc-chart-svg" style="min-width:{width:.0f}px" viewBox="0 0 {width:.0f} {height:.0f}" role="img" aria-label="Кривая доходности">' + "".join(parts) + "</svg>"
+    return f'<svg class="tc-chart-svg" viewBox="0 0 {width:.0f} {height:.0f}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Кривая доходности">' + "".join(parts) + "</svg>"
 
 
 def _daily_bars_svg_all_dates(rows, days_in_month: int) -> str:
@@ -110,7 +110,7 @@ def _daily_bars_svg_all_dates(rows, days_in_month: int) -> str:
         bar_height = max(1.5, abs(value_y - zero_y))
         color = "#68d99a" if pnl > 0 else "#ee6465" if pnl < 0 else "#7f899b"
         parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bar_width:.1f}" height="{bar_height:.1f}" rx="2.5" fill="{color}"/>')
-    return f'<svg class="tc-chart-svg" style="min-width:{width:.0f}px" viewBox="0 0 {width:.0f} {height:.0f}" role="img" aria-label="Дневной P&amp;L">' + "".join(parts) + "</svg>"
+    return f'<svg class="tc-chart-svg" viewBox="0 0 {width:.0f} {height:.0f}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Дневной P&amp;L">' + "".join(parts) + "</svg>"
 
 
 def _period_equity_curve_svg_all_dates(trades: pd.DataFrame, start_date, end_date) -> str:
@@ -184,6 +184,15 @@ CHART_DISPLAY_CSS = """
 }
 .tc-chart-x-label {
   font-size: 10px !important;
+}
+.tc-charts-grid .tc-chart-card {
+  overflow-x: hidden !important;
+}
+.tc-charts-grid .tc-chart-svg {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
 }
 .tc-period-equity-card {
   overflow-x: hidden !important;
@@ -300,6 +309,7 @@ st.markdown(
     }
     .site-dashboard-heading { display:flex; align-items:center; gap:10px; color:#f3f5f8; font:820 clamp(30px,2.4vw,42px) Inter,system-ui,sans-serif; line-height:1.2; letter-spacing:-.025em; padding:.15rem 0 .55rem; }
     .site-dashboard-sparkle { color:#69dda0; font-size:1.12em; line-height:1; }
+    .tc-dashboard-grid > .tc-dashboard-card:nth-child(6) > .tc-metric-value { color:#dbb8ff !important; }
     </style>
     """,
     unsafe_allow_html=True,
