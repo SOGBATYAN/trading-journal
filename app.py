@@ -309,7 +309,7 @@ st.markdown(
     }
     .site-dashboard-heading { display:flex; align-items:center; gap:10px; color:#f3f5f8; font:820 clamp(30px,2.4vw,42px) Inter,system-ui,sans-serif; line-height:1.2; letter-spacing:-.025em; padding:.15rem 0 .55rem; }
     .site-dashboard-sparkle { color:#69dda0; font-size:1.12em; line-height:1; }
-    .tc-dashboard-grid > .tc-dashboard-card:nth-child(6) > .tc-metric-value { color:#dbb8ff !important; }
+    .tc-dashboard-grid > .tc-dashboard-card:nth-child(6) > .tc-metric-value { color:#f3f5f8 !important; }
     </style>
     """,
     unsafe_allow_html=True,
